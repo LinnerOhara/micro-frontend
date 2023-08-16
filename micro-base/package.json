@@ -1,0 +1,23 @@
+{
+  "name": "micro-base",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "start": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "antd": "^5.8.3",
+    "preact": "^10.16.0",
+    "qiankun": "^2.10.12",
+    "zone.js": "^0.13.1"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.5.0",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5"
+  }
+}

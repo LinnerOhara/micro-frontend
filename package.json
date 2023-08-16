@@ -1,0 +1,32 @@
+{
+  "name": "micro-frontend",
+  "version": "1.0.0",
+  "description": "micro-frontend with qiankun",
+  "main": "index.js",
+  "scripts": {
+    "install": "npm-run-all --serial install:*",
+    "install:main": "cd micro-base && pnpm install",
+    "install:sub-vue": "cd sub-vue && pnpm install",
+    "install:sub-react": "cd sub-react && pnpm install",
+    "install:sub-angular": "cd sub-angular && pnpm install",
+    "start": "npm-run-all --serial start:*",
+    "start:main": "cd micro-base && npm run start",
+    "start:sub-vue": "cd sub-vue && npm run start",
+    "start:sub-react": "cd sub-react && npm run start",
+    "start:sub-angular": "cd sub-angular && npm run start",
+    "build": "npm-run-all build:* && bash ./scripts/bundle.sh",
+    "build:main": "cd micro-base && npm run build",
+    "build:sub-vue": "cd sub-vue && npm run build",
+    "build:sub-react": "cd sub-react && npm run build",
+    "build:sub-angular": "cd sub-angular && npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "qiankun"
+  ],
+  "author": "Peijie Ke <ke_linner@foxmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
+  }
+}
