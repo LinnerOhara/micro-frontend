@@ -1,0 +1,21 @@
+.avater {
+  width: 60px;
+  border-radius: 50%;
+}
+
+.menu {
+  display: flex;
+  color: #fff;
+  gap: 20px;
+  list-style: none;
+}
+
+.menuItem {
+  cursor: pointer;
+  padding: 0 20px;
+}
+
+.menuSelected {
+  background-color: rgb(58, 128, 217);
+  border-radius: 5px;
+}
