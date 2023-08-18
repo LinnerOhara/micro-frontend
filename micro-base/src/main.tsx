@@ -6,14 +6,13 @@ import { registerMicroApps, start } from 'qiankun'
 registerMicroApps([
   {
     name: 'sub-react',
-    // entry: '//localhost:8080',
-    entry: '//github.com/react',
+    entry: '//localhost:5174',
     activeRule: '/sub-react',
     container: '#sub-app'
   },
   {
     name: 'sub-vue',
-    entry: '//localhost:8001',
+    entry: '//localhost:5174',
     activeRule: '/sub-vue',
     container: '#sub-app'
   },

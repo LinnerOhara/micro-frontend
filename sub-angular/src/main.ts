@@ -3,9 +3,6 @@ import { NgModuleRef } from '@angular/core';
 import { AppModule } from './app/app.module';
 import './public-path';
 
-platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.error(err));
-
 let app: void | NgModuleRef<AppModule>;
 async function render() {
   app = await platformBrowserDynamic()
@@ -29,5 +26,5 @@ export async function mount(props: Object) {
 export async function unmount(props: Object) {
   console.log('sub-angular unmount', props);
   // @ts-ignore
-  app.destroy();
+  platformBrowserDynamic().destroy()
 }

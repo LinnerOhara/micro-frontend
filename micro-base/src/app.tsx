@@ -45,6 +45,7 @@ export function App() {
             }
           ]}
           onClick={({ key }: { key: string }) => {
+            console.log('pushState', key)
             window.history.pushState(null, '', key)
           }}
         />
