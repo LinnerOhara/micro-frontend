@@ -10,3 +10,9 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
   line-height: 1;
 }
+
+#sub-app {
+  height: 100%;
+  /* 让子应用的position： fixed 定位以app内的为准 */
+  transform: translate(0);
+}

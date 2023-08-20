@@ -3,12 +3,16 @@ import type { App as AppType } from 'vue'
 import './style.css'
 import App from './App.vue'
 import { renderWithQiankun, qiankunWindow } from 'vite-plugin-qiankun/dist/helper'
+import 'virtual:uno.css'
+import '@unocss/reset/normalize.css'
+import router from './router'
 
 let instance: AppType
 function render(props: any) {
   const { container } = props
   const c = container ? container.querySelector("#sub-vue") : document.getElementById("sub-vue")
   instance = createApp(App)
+  instance.use(router)
   instance.mount(c)
 }
 
