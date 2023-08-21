@@ -1,7 +1,25 @@
 <nz-layout class="container">
   <nz-sider nzCollapsible
     [(nzCollapsed)]="collapsed">
-    <app-menu></app-menu>
+    <ul nz-menu nzTheme="dark" nzMode="inline">
+      <ng-container *ngFor="let item of menuData">
+        <li nz-submenu *ngIf="item.children && item.children.length"
+          [nzTitle]="item.name"
+          [nzIcon]="item.icon || ''">
+          <ul>
+            <app-sub-menu [menuData]="item.children"></app-sub-menu>
+          </ul>
+        </li>
+        <li nz-menu-item *ngIf="!(item.children && item.children.length) && item.name"
+          [nzMatchRouter]="true"
+        >
+          <span nz-icon
+          [nzType]="item.icon || ''"
+          nzTheme="outline"></span>
+          <span [routerLink]="[item.path]">{{item.name}}</span>
+        </li>
+      </ng-container>
+    </ul>
   </nz-sider>
   <div [ngStyle]="{
     width: collapsed ? '80px' : '200px'

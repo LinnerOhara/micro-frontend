@@ -1,6 +1,8 @@
 import { NgModule, APP_INITIALIZER } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule,  } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
@@ -10,8 +12,7 @@ import { NzLayoutModule } from 'ng-zorro-antd/layout'
 import { NzMenuModule } from 'ng-zorro-antd/menu'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 // ng-zorro-antd
-import { MenuComponent } from './common/layout/menu/menu.component';
-import { SubMenuComponent } from './common/layout/menu/components/sub-menu/sub-menu.component';
+import { SubMenuComponent } from './common/layout/sub-menu/sub-menu.component';
 import { AppInitService } from './common/services/app-init.service';
 
 export function initializeApp(appInitService: AppInitService) {
@@ -23,11 +24,11 @@ export function initializeApp(appInitService: AppInitService) {
 @NgModule({
   declarations: [
     AppComponent,
-    MenuComponent,
     SubMenuComponent
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
     NzButtonModule,

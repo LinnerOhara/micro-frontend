@@ -14,7 +14,7 @@ const menuData = [
     children: [
       {
         path: '/canvas/plum',
-        name: ''
+        name: '梅花'
       }
     ]
   }
