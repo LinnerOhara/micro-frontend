@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent  },
+  { path: 'third-libraries', loadChildren: () => import('./third-libraries/third-libraries.module').then(m => m.ThirdLibrariesModule) }
 ]
 
 @NgModule({

@@ -5,13 +5,19 @@ const menuData = [
     icon: 'home'
   },
   {
-    path: '/canvas',
-    name: '画布',
+    path: '/third-libraries',
+    name: '第三方库',
     icon: 'border',
     children: [
       {
-        path: '/canvas/plum',
-        name: '梅花'
+        path: '/third-libraries/exceljs',
+        name: 'exceljs',
+        children: [
+          {
+            path: '/third-libraries/exceljs/example1',
+            name: '修改表头',
+          }
+        ]
       }
     ]
   }
