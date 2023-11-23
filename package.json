@@ -3,6 +3,12 @@
   "version": "1.0.0",
   "description": "micro-frontend with qiankun",
   "main": "index.js",
+  "workspaces": [
+    "micro-base/*",
+    "sub-angular/*",
+    "sub-react/*",
+    "sub-vue/*"
+  ],
   "scripts": {
     "install": "npm-run-all --serial install:*",
     "install:main": "cd micro-base && pnpm install",

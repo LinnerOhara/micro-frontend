@@ -18,6 +18,16 @@ const menuData = [
             name: '修改表头',
           }
         ]
+      },
+      {
+        path: '/third-libraries/fabric',
+        name: 'fabric',
+        children: [
+          {
+            path: '/third-libraries/fabric/example1',
+            name: '示例1',
+          }
+        ]
       }
     ]
   }

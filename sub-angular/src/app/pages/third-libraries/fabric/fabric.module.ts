@@ -1,18 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
+import { Example1Component } from './example1/example1.component';
 
 const routes: Routes = [
-  { path: 'exceljs', loadChildren: () => import('./exceljs/exceljs.module').then(m => m.ExceljsModule) },
-  { path: 'fabric', loadChildren: () => import('./fabric/fabric.module').then(m => m.FabricModule) }
+  { path: 'example1', component: Example1Component }
 ]
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    Example1Component
+  ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes)
   ],
   exports: [RouterModule]
 })
-export class ThirdLibrariesModule { }
+export class FabricModule { }
