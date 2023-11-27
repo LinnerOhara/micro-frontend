@@ -1,0 +1,16 @@
+{
+  "name": "sub-pure",
+  "version": "1.0.0",
+  "description": "",
+  "main": "entry.js",
+  "scripts": {
+    "start": "cross-env PORT=7104 http-server . --cors",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "http-server": "^14.1.1"
+  }
+}

@@ -21,6 +21,12 @@ export const microApps = [
     entry: '//localhost:4200',
     activeRule: '/sub-angular',
     container: '#sub-app'
+  },
+  {
+    name: 'sub-pure',
+    entry: '//localhost:7104',
+    activeRule: '/sub-pure',
+    container: '#sub-app'
   }
 ]
 

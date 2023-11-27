@@ -1,0 +1,53 @@
+<div class="container">
+  <div class="image-list">
+    <div class="image-item" *ngFor="let image of imageList" (click)="repaintImage(image.url)">
+      <img [src]="image.url" />
+    </div>
+  </div>
+</div>
+
+<div class="mask" [ngClass]="{
+    show: maskVisivle
+  }">
+  <div class="close-icon" (click)="closeMask()">
+    <span nz-icon nzType="close-circle" nzTheme="outline"></span>
+  </div>
+  <div class="loading" [hidden]="!imageLoading">
+    <span class="spin-dot">
+      <i class="spin-dot-item"></i>
+      <i class="spin-dot-item"></i>
+      <i class="spin-dot-item"></i>
+      <i class="spin-dot-item"></i>
+    </span>
+    <div class="loading-text">加载中。。。</div>
+  </div>
+  <div class="canvas" [hidden]="imageLoading">
+    <div class="header">
+      <span>{{imageName}}</span>
+      <span class="icon" nz-icon nzType="close-circle" nzTheme="fill" (click)="closeMask()"></span>
+    </div>
+    <div class="action-bar">
+      <div class="action-left">
+        <span class="action-item" (click)="closeMask()">取消</span>
+      </div>
+      <div class="action-right">
+        <span class="action-item">清空</span>
+        <span class="action-item">确定</span>
+      </div>
+    </div>
+    <canvas #fabric></canvas>
+    <div class="tool-bar">
+      <div class="tool-left">
+        <div class="width-list">
+          <i *ngFor="let width of pencilWidthList" class="width-item" [ngClass]="{ selected: width === currentPencilWidth }" [ngStyle]="{ width: width * 2 + 'px', height: width * 2 + 'px' }" (click)="changePencilWidth(width)"></i>
+        </div>
+        <div class="color-list">
+          <i *ngFor="let color of colorList" class="color-item" [ngClass]="{ selected: color === currentColor }" [ngStyle]="{ color: color }" (click)="changePencilColor(color)"></i>
+        </div>
+      </div>
+      <div class="tool-right">
+        <svg (click)="undo()" style="cursor: pointer;" viewBox="64 64 896 896" focusable="false" data-icon="rollback" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M793 242H366v-74c0-6.7-7.7-10.4-12.9-6.3l-142 112a8 8 0 000 12.6l142 112c5.2 4.1 12.9.4 12.9-6.3v-74h415v470H175c-4.4 0-8 3.6-8 8v60c0 4.4 3.6 8 8 8h618c35.3 0 64-28.7 64-64V306c0-35.3-28.7-64-64-64z"></path></svg>
+      </div>
+    </div>
+  </div>
+</div>
