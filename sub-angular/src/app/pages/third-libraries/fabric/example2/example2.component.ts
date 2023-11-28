@@ -10,11 +10,11 @@ import { Canvas, PencilBrush, Object } from 'fabric/fabric-impl'
 export class Example2Component implements OnInit {
   @ViewChild('fabric') fabricRef!: ElementRef
   // 画布实例
-  canvanInstance?: Canvas
+  canvasInstance?: Canvas
   // 铅笔实例
   pencilBrushInstance?: PencilBrush
   imageList: { url: string }[] = []
-  maskVisivle: boolean = false
+  maskVisible: boolean = false
   imageName: string = ''
   // 图片加载
   imageLoading: boolean = false
@@ -72,22 +72,22 @@ export class Example2Component implements OnInit {
         fabric.Image.fromURL(url, img => {
           this.imageLoading = false
 
-          this.canvanInstance = new fabric.Canvas(this.fabricRef.nativeElement, {
+          this.canvasInstance = new fabric.Canvas(this.fabricRef.nativeElement, {
             width: screenWidth * 0.4,
             height: 0
           })
           this.imageName = img.name || '未命名'
           // 计算画布的高度，保持图片比例
-          const canvasHeight = (this.canvanInstance!.getWidth() / img.width!) * img.height!;
+          const canvasHeight = (this.canvasInstance!.getWidth() / img.width!) * img.height!;
           // 设置画布的高度
-          this.canvanInstance?.setHeight(canvasHeight);
-          this.canvanInstance?.setBackgroundImage(img, this.canvanInstance.renderAll.bind(this.canvanInstance), {
-            scaleX: this.canvanInstance.getWidth() / img.width!,
-            scaleY: this.canvanInstance.getHeight() / img.height!
+          this.canvasInstance?.setHeight(canvasHeight);
+          this.canvasInstance?.setBackgroundImage(img, this.canvasInstance.renderAll.bind(this.canvasInstance), {
+            scaleX: this.canvasInstance.getWidth() / img.width!,
+            scaleY: this.canvasInstance.getHeight() / img.height!
           })
           this.initPencilBrush()
           this.saveCanvasState()
-          this.canvanInstance.on('mouse:up', () => {
+          this.canvasInstance.on('mouse:up', () => {
             this.saveCanvasState()
           })
         })
@@ -99,30 +99,30 @@ export class Example2Component implements OnInit {
   }
 
   initPencilBrush() {
-    if (this.canvanInstance) {
-      this.pencilBrushInstance = new fabric.PencilBrush(this.canvanInstance)
+    if (this.canvasInstance) {
+      this.pencilBrushInstance = new fabric.PencilBrush(this.canvasInstance)
       this.currentColor = this.colorList[0]
       this.currentPencilWidth = this.pencilWidthList[1]
       this.pencilBrushInstance.color = this.currentColor
       this.pencilBrushInstance.width = this.currentPencilWidth
-      this.canvanInstance.freeDrawingBrush = this.pencilBrushInstance
+      this.canvasInstance.freeDrawingBrush = this.pencilBrushInstance
       // 开启绘制
-      this.canvanInstance.isDrawingMode = true
+      this.canvasInstance.isDrawingMode = true
     }
   }
 
   saveCanvasState() {
-    const currentState = this.canvanInstance?.toJSON(['id'])
+    const currentState = this.canvasInstance?.toJSON(['id'])
     this.currentCanvasStateIndex++
     this.canvasState.splice(this.currentCanvasStateIndex, this.canvasState.length, currentState!)
   }
 
   clearCanvas() {
     this.repaintImage(this.currentImageUrl)
-    if (this.canvanInstance) {
-      this.canvanInstance.off('mouse:up')
-      this.canvanInstance.dispose()
-      this.canvanInstance = undefined
+    if (this.canvasInstance) {
+      this.canvasInstance.off('mouse:up')
+      this.canvasInstance.dispose()
+      this.canvasInstance = undefined
       this.currentCanvasStateIndex = -1
       this.canvasState = []
       this.imageName = ''
@@ -130,9 +130,9 @@ export class Example2Component implements OnInit {
   }
 
   export() {
-    if (this.canvanInstance) {
-      let image = this.canvanInstance.toDataURL()
-      this.canvanInstance.requestRenderAll()
+    if (this.canvasInstance) {
+      let image = this.canvasInstance.toDataURL()
+      this.canvasInstance.requestRenderAll()
     }
   }
 
@@ -140,8 +140,8 @@ export class Example2Component implements OnInit {
     if (this.currentCanvasStateIndex > 0) {
       this.currentCanvasStateIndex--
       const previousState = this.canvasState[this.currentCanvasStateIndex];
-      this.canvanInstance?.loadFromJSON(previousState, () => {
-        this.canvanInstance?.renderAll()
+      this.canvasInstance?.loadFromJSON(previousState, () => {
+        this.canvasInstance?.renderAll()
       })
     }
   }
@@ -161,10 +161,10 @@ export class Example2Component implements OnInit {
   }
 
   distoryCanvas() {
-    if (this.canvanInstance) {
-      this.canvanInstance.off('mouse:up')
-      this.canvanInstance.dispose()
-      this.canvanInstance = undefined
+    if (this.canvasInstance) {
+      this.canvasInstance.off('mouse:up')
+      this.canvasInstance.dispose()
+      this.canvasInstance = undefined
     }
     this.currentCanvasStateIndex = -1
     this.canvasState = []
@@ -172,11 +172,11 @@ export class Example2Component implements OnInit {
   }
 
   showMask() {
-    this.maskVisivle = true
+    this.maskVisible = true
   }
 
   closeMask() {
     this.distoryCanvas()
-    this.maskVisivle = false
+    this.maskVisible = false
   }
 }
