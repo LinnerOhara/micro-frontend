@@ -1,6 +1,6 @@
 <div class="container">
   <div class="image-list">
-    <div class="image-item" *ngFor="let image of imageList" (click)="repaintImage(image.url)">
+    <div class="image-item" *ngFor="let image of imageList" (click)="imageClick(image.url)">
       <img [src]="image.url" />
     </div>
   </div>
@@ -31,8 +31,8 @@
         <span class="action-item" (click)="closeMask()">取消</span>
       </div>
       <div class="action-right">
-        <span class="action-item">清空</span>
-        <span class="action-item">确定</span>
+        <span class="action-item" (click)="clearCanvas()">清空</span>
+        <span class="action-item" (click)="export()">确定</span>
       </div>
     </div>
     <canvas #fabric></canvas>

@@ -29,11 +29,12 @@ export class Example2Component implements OnInit {
   // 当前画布状态索引
   currentCanvasStateIndex: number = -1
   canvasState: { objects: Object[], version: string }[] = []
+  currentImageUrl: string = ''
 
   ngOnInit(): void {
     this.imageList = [
       {
-        url: "https://www.ffcafe.cn/images/avatars/rinne.jpg"
+        url: "https://erp286.ifca.com.cn:8443/zg-test/b/platform/api/app/filePreviewV2/filePreview?FileId=3a0f25ec-a87d-b834-5775-aea476c62da7&FileType=5"
       },
       {
         url: "https://www.ffcafe.cn/images/avatars/rinne.jpg"
@@ -41,36 +42,60 @@ export class Example2Component implements OnInit {
       {
         url: "https://www.ffcafe.cn/images/avatars/rinne.jpg"
       },
+      {
+        url: "https://cdn.ifca.cloud/productHomeImage/yzg/top.jpg"
+      },
+      {
+        url: 'http://127.0.0.1:8080/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-10-20%20152229.png'
+      },
+      {
+        url: 'http://localhost:3050/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-10-20%20152229.png'
+      }
     ]
+  }
+
+  imageClick(url: string) {
+    this.currentImageUrl = url
+    this.repaintImage(url)
   }
 
   repaintImage(url: string) {
     const screenWidth = window.innerWidth
 
     this.imageLoading = true
-    fabric.Image.fromURL(url, img => {
-      this.imageLoading = false
 
-      this.canvanInstance = new fabric.Canvas(this.fabricRef.nativeElement, {
-        width: screenWidth * 0.5,
-        height: 0
+    fetch(url)
+      .then(response => response.blob())
+      .then(blob => {
+        const url = URL.createObjectURL(blob);
+
+        fabric.Image.fromURL(url, img => {
+          this.imageLoading = false
+
+          this.canvanInstance = new fabric.Canvas(this.fabricRef.nativeElement, {
+            width: screenWidth * 0.4,
+            height: 0
+          })
+          this.imageName = img.name || '未命名'
+          // 计算画布的高度，保持图片比例
+          const canvasHeight = (this.canvanInstance!.getWidth() / img.width!) * img.height!;
+          // 设置画布的高度
+          this.canvanInstance?.setHeight(canvasHeight);
+          this.canvanInstance?.setBackgroundImage(img, this.canvanInstance.renderAll.bind(this.canvanInstance), {
+            scaleX: this.canvanInstance.getWidth() / img.width!,
+            scaleY: this.canvanInstance.getHeight() / img.height!
+          })
+          this.initPencilBrush()
+          this.saveCanvasState()
+          this.canvanInstance.on('mouse:up', () => {
+            this.saveCanvasState()
+          })
+        })
+        this.showMask()
       })
-      this.imageName = img.name || '未命名'
-      // 计算画布的高度，保持图片比例
-      const canvasHeight = (this.canvanInstance!.getWidth() / img.width!) * img.height!;
-      // 设置画布的高度
-      this.canvanInstance?.setHeight(canvasHeight);
-      this.canvanInstance?.setBackgroundImage(img, this.canvanInstance.renderAll.bind(this.canvanInstance), {
-        scaleX: this.canvanInstance.getWidth() / img.width!,
-        scaleY: this.canvanInstance.getHeight() / img.height!
+      .catch(() => {
+        console.error('无法加载图片，请检查图片是否允许跨域')
       })
-      this.initPencilBrush()
-      this.saveCanvasState()
-      this.canvanInstance.on('mouse:up', () => {
-        this.saveCanvasState()
-      })
-    })
-    this.showMask()
   }
 
   initPencilBrush() {
@@ -90,6 +115,25 @@ export class Example2Component implements OnInit {
     const currentState = this.canvanInstance?.toJSON(['id'])
     this.currentCanvasStateIndex++
     this.canvasState.splice(this.currentCanvasStateIndex, this.canvasState.length, currentState!)
+  }
+
+  clearCanvas() {
+    this.repaintImage(this.currentImageUrl)
+    if (this.canvanInstance) {
+      this.canvanInstance.off('mouse:up')
+      this.canvanInstance.dispose()
+      this.canvanInstance = undefined
+      this.currentCanvasStateIndex = -1
+      this.canvasState = []
+      this.imageName = ''
+    }
+  }
+
+  export() {
+    if (this.canvanInstance) {
+      let image = this.canvanInstance.toDataURL()
+      this.canvanInstance.requestRenderAll()
+    }
   }
 
   undo() {
