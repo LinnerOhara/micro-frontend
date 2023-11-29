@@ -38,6 +38,7 @@
     <canvas #fabric></canvas>
     <div class="tool-bar">
       <div class="tool-left">
+        <span class="icon" [ngClass]="{ selected: isDrawing }" nz-icon nzType="edit" nzTheme="outline" (click)="changeDrawState()"></span>
         <div class="width-list">
           <i *ngFor="let width of pencilWidthList" class="width-item" [ngClass]="{ selected: width === currentPencilWidth }" [ngStyle]="{ width: width * 2 + 'px', height: width * 2 + 'px' }" (click)="changePencilWidth(width)"></i>
         </div>

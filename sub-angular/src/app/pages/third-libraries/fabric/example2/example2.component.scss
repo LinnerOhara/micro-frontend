@@ -156,9 +156,19 @@
       color: white;
       display: flex;
       justify-content: space-between;
+      align-items: center;
 
       &>.tool-left {
         display: flex;
+
+        .icon {
+          cursor: pointer;
+          margin-right: 20px;
+
+          &.selected {
+            color: #11b9b6;
+          }
+        }
 
         &>.color-list {
           display: flex;

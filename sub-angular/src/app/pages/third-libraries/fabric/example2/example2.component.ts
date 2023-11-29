@@ -1,6 +1,6 @@
 import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { fabric } from 'fabric'
-import { Canvas, PencilBrush, Object } from 'fabric/fabric-impl'
+import { Canvas, PencilBrush, Object, Transform } from 'fabric/fabric-impl'
 
 @Component({
   selector: 'app-example2',
@@ -30,11 +30,23 @@ export class Example2Component implements OnInit {
   currentCanvasStateIndex: number = -1
   canvasState: { objects: Object[], version: string }[] = []
   currentImageUrl: string = ''
+  canvas: {
+    isDragging: boolean
+    lastPosX: number
+    lastPosY: number
+  } = {
+    isDragging: false,
+    lastPosX: 0,
+    lastPosY: 0
+  }
+  isDrawing: boolean = false
+  // 原视图窗口
+  originalViewport?: number[] = []
 
   ngOnInit(): void {
     this.imageList = [
       {
-        url: "https://erp286.ifca.com.cn:8443/zg-test/b/platform/api/app/filePreviewV2/filePreview?FileId=3a0f25ec-a87d-b834-5775-aea476c62da7&FileType=5"
+        url: "https://erp286.ifca.com.cn:8443/zg-test/b/platform/api/app/fileStorage/downloadFileStream/3a0f2705-7c9e-e01b-458a-33fa994c03fc"
       },
       {
         url: "https://www.ffcafe.cn/images/avatars/rinne.jpg"
@@ -46,10 +58,10 @@ export class Example2Component implements OnInit {
         url: "https://cdn.ifca.cloud/productHomeImage/yzg/top.jpg"
       },
       {
-        url: 'http://127.0.0.1:8080/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-10-20%20152229.png'
+        url: 'https://erp286.ifca.com.cn:8443/zg-test/b/platform/api/app/fileStorage/downloadFileStream/3a0f270b-618c-9ede-6e5f-385e7f67eb36'
       },
       {
-        url: 'http://localhost:3050/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-10-20%20152229.png'
+        url: 'https://erp286.ifca.com.cn:8443/zg-test/b/platform/api/app/fileStorage/downloadFileStream/3a0f270b-618c-9ede-6e5f-385e7f67eb36'
       }
     ]
   }
@@ -74,7 +86,8 @@ export class Example2Component implements OnInit {
 
           this.canvasInstance = new fabric.Canvas(this.fabricRef.nativeElement, {
             width: screenWidth * 0.4,
-            height: 0
+            height: 0,
+            selection: false
           })
           this.imageName = img.name || '未命名'
           // 计算画布的高度，保持图片比例
@@ -85,11 +98,8 @@ export class Example2Component implements OnInit {
             scaleX: this.canvasInstance.getWidth() / img.width!,
             scaleY: this.canvasInstance.getHeight() / img.height!
           })
-          this.initPencilBrush()
           this.saveCanvasState()
-          this.canvasInstance.on('mouse:up', () => {
-            this.saveCanvasState()
-          })
+          this.onCanvasEvent()
         })
         this.showMask()
       })
@@ -100,6 +110,7 @@ export class Example2Component implements OnInit {
 
   initPencilBrush() {
     if (this.canvasInstance) {
+      this.isDrawing = true
       this.pencilBrushInstance = new fabric.PencilBrush(this.canvasInstance)
       this.currentColor = this.colorList[0]
       this.currentPencilWidth = this.pencilWidthList[1]
@@ -111,16 +122,108 @@ export class Example2Component implements OnInit {
     }
   }
 
+  removePencilBrush() {
+    if (this.pencilBrushInstance) {
+      this.isDrawing = false
+      this.canvasInstance!.isDrawingMode = false
+      this.pencilBrushInstance = undefined
+    }
+  }
+
   saveCanvasState() {
     const currentState = this.canvasInstance?.toJSON(['id'])
     this.currentCanvasStateIndex++
     this.canvasState.splice(this.currentCanvasStateIndex, this.canvasState.length, currentState!)
+    if (this.canvasInstance) {
+      this.canvasInstance.forEachObject(obj => {
+        obj.set({
+          selectable: false,  // 使对象不可选
+          evented: false,     // 禁用对象的事件处理
+          // hasControls: false,  // 禁用对象的控制点
+          // hasBorders: false,   // 禁用对象的边框
+        })
+      })
+      this.canvasInstance.requestRenderAll()
+    }
+  }
+
+  onCanvasEvent() {
+    if (this.canvasInstance) {
+      this.originalViewport = [...this.canvasInstance.viewportTransform!]
+      this.canvasInstance.on('mouse:up', () => {
+        this.saveCanvasState()
+      })
+      this.canvasInstance.on('mouse:down', opt => { // 鼠标按下时触发
+        let evt = opt.e
+        // if (evt.altKey === true) { // 是否按住alt
+        //   this.canvas.isDragging = true // isDragging 是自定义的，开启移动状态
+        //   this.canvas.lastPosX = evt.clientX // lastPosX 是自定义的
+        //   this.canvas.lastPosY = evt.clientY // lastPosY 是自定义的
+        // }
+        // 如果不在编辑状态
+        if (!this.isDrawing) {
+          this.canvas.isDragging = true
+          this.canvas.lastPosX = evt.clientX
+          this.canvas.lastPosY = evt.clientY
+        }
+      })
+
+      this.canvasInstance.on('mouse:move', opt => { // 鼠标移动时触发
+        if (this.canvas.isDragging) {
+          let evt = opt.e
+          let vpt = this.canvasInstance?.viewportTransform // 聚焦视图的转换
+          vpt![4] += evt.clientX - this.canvas.lastPosX
+          vpt![5] += evt.clientY - this.canvas.lastPosY
+          this.canvasInstance?.requestRenderAll() // 重新渲染
+          this.canvas.lastPosX  = evt.clientX
+          this.canvas.lastPosY  = evt.clientY
+        }
+      })
+
+      this.canvasInstance.on('mouse:up', opt => { // 鼠标松开时触发
+        this.canvasInstance?.setViewportTransform(this.canvasInstance.viewportTransform!) // 设置此画布实例的视口转换
+        this.canvas.isDragging = false // 关闭移动状态
+      })
+
+      // 监听鼠标滚轮事件
+      this.canvasInstance.on('mouse:wheel', opt => {
+        let delta = opt.e.deltaY // 滚轮向上滚一下是 -100，向下滚一下是 100
+        let zoom = this.canvasInstance!.getZoom() // 获取画布当前缩放值
+        opt.e.preventDefault()
+
+        // 控制缩放范围在 0.01~20 的区间内
+        zoom *= 0.999 ** delta
+        if (zoom > 20) zoom = 20
+        if (zoom < 0.01) zoom = 0.01
+
+        // 设置画布缩放比例
+        // 关键点！！！
+        // 参数1：将画布的所放点设置成鼠标当前位置
+        // 参数2：传入缩放值
+        this.canvasInstance!.zoomToPoint(
+          {
+            x: opt.e.offsetX, // 鼠标x轴坐标
+            y: opt.e.offsetY  // 鼠标y轴坐标
+          },
+          zoom // 最后要缩放的值
+        )
+      })
+    }
+  }
+
+  offCanvasEvent() {
+    if (this.canvasInstance) {
+      this.canvasInstance.off('mouse:up')
+      this.canvasInstance.off('mouse:down')
+      this.canvasInstance.off('mouse:move')
+      this.canvasInstance.off('mouse:wheel')
+    }
   }
 
   clearCanvas() {
     this.repaintImage(this.currentImageUrl)
     if (this.canvasInstance) {
-      this.canvasInstance.off('mouse:up')
+      this.offCanvasEvent()
       this.canvasInstance.dispose()
       this.canvasInstance = undefined
       this.currentCanvasStateIndex = -1
@@ -129,9 +232,17 @@ export class Example2Component implements OnInit {
     }
   }
 
+  restoreOriginalState() {
+    if (this.canvasInstance) {
+      this.canvasInstance.setZoom(1)
+      this.canvasInstance.setViewportTransform(this.originalViewport!)
+    }
+  }
+
   export() {
     if (this.canvasInstance) {
       let image = this.canvasInstance.toDataURL()
+      this.restoreOriginalState()
       this.canvasInstance.requestRenderAll()
     }
   }
@@ -160,7 +271,7 @@ export class Example2Component implements OnInit {
     }
   }
 
-  distoryCanvas() {
+  destroyCanvas() {
     if (this.canvasInstance) {
       this.canvasInstance.off('mouse:up')
       this.canvasInstance.dispose()
@@ -176,7 +287,15 @@ export class Example2Component implements OnInit {
   }
 
   closeMask() {
-    this.distoryCanvas()
+    this.destroyCanvas()
     this.maskVisible = false
+  }
+
+  changeDrawState() {
+    if (this.isDrawing) {
+      this.removePencilBrush()
+    } else {
+      this.initPencilBrush()
+    }
   }
 }
