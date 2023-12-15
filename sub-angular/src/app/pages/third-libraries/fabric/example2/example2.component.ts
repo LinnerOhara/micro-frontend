@@ -1,6 +1,6 @@
 import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { fabric } from 'fabric'
-import { Canvas, PencilBrush, Object, Transform } from 'fabric/fabric-impl'
+import { Canvas, PencilBrush, Object } from 'fabric/fabric-impl'
 
 @Component({
   selector: 'app-example2',
@@ -42,6 +42,15 @@ export class Example2Component implements OnInit {
   isDrawing: boolean = false
   // 原视图窗口
   originalViewport?: number[] = []
+  currentPointer?: fabric.Object[] = []
+  MAX_POINTER_NUM = 1
+  canvasType: 'ImageEditing' | 'ImageOverlays' = 'ImageOverlays'
+  pointers: { x: number, y: number }[] = [
+    {
+      x: 299.9999935435309,
+      y: 160.0437435038505
+    }
+  ]
 
   ngOnInit(): void {
     this.imageList = [
@@ -62,6 +71,12 @@ export class Example2Component implements OnInit {
       },
       {
         url: 'https://erp286.ifca.com.cn:8443/zg-test/b/platform/api/app/fileStorage/downloadFileStream/3a0f270b-618c-9ede-6e5f-385e7f67eb36'
+      },
+      {
+        url: 'https://erp286.ifca.com.cn:8443/zg-test/b/platform/api/app/fileStorage/downloadFileStream/3a0f745c-5e66-c87b-1325-dd82d55723b5'
+      },
+      {
+        url: 'https://erp286.ifca.com.cn:8443/zg-test/b/platform/api/app/fileStorage/downloadFileStream/3a0f745c-e1ba-dec5-8eb5-34e71a32c2f4'
       }
     ]
   }
@@ -90,16 +105,27 @@ export class Example2Component implements OnInit {
             selection: false
           })
           this.imageName = img.name || '未命名'
+          const windowHeight = window.innerHeight
+          // 是否过高
+          const isOverHeight = img.height! * 0.4 > windowHeight
           // 计算画布的高度，保持图片比例
-          const canvasHeight = (this.canvasInstance!.getWidth() / img.width!) * img.height!;
+          const scaleX = this.canvasInstance!.getWidth() / img.width!
+          const canvasHeight = isOverHeight ? windowHeight * 0.8 : scaleX * img.height!;
           // 设置画布的高度
           this.canvasInstance?.setHeight(canvasHeight);
+          const scaleY = isOverHeight ? scaleX : this.canvasInstance.getHeight() / img.height!
           this.canvasInstance?.setBackgroundImage(img, this.canvasInstance.renderAll.bind(this.canvasInstance), {
-            scaleX: this.canvasInstance.getWidth() / img.width!,
-            scaleY: this.canvasInstance.getHeight() / img.height!
+            scaleX: scaleX,
+            scaleY: scaleY
           })
           this.saveCanvasState()
           this.onCanvasEvent()
+
+          if (this.canvasType === 'ImageOverlays' && this.pointers) {
+            this.pointers.forEach(item => {
+              this.changePointer(item as any)
+            })
+          }
         })
         this.showMask()
       })
@@ -147,6 +173,27 @@ export class Example2Component implements OnInit {
     }
   }
 
+  changePointer(point: fabric.Point, absolutePointer?: fabric.Point): void {
+    let pointerIndex = this.currentPointer?.findIndex(item => item.containsPoint(point!))
+    if (typeof pointerIndex === 'number' && pointerIndex !== -1) {
+      this.canvasInstance?.remove(this.currentPointer?.[pointerIndex]!)
+      this.currentPointer?.splice(pointerIndex, 1)
+      return void 0
+    }
+    if (this.currentPointer && this.currentPointer?.length >= this.MAX_POINTER_NUM) {
+      return void 0
+    }
+    const circle = new fabric.Circle({
+      left: absolutePointer?.x || point.x,
+      top: absolutePointer?.y || point.y,
+      radius: 8,
+      fill: 'red',
+      selectable: false
+    });
+    this.canvasInstance?.add(circle)
+    this.currentPointer?.push(circle)
+  }
+
   onCanvasEvent() {
     if (this.canvasInstance) {
       this.originalViewport = [...this.canvasInstance.viewportTransform!]
@@ -155,6 +202,7 @@ export class Example2Component implements OnInit {
       })
       this.canvasInstance.on('mouse:down', opt => { // 鼠标按下时触发
         let evt = opt.e
+        let absolutePointer = opt.absolutePointer
         // if (evt.altKey === true) { // 是否按住alt
         //   this.canvas.isDragging = true // isDragging 是自定义的，开启移动状态
         //   this.canvas.lastPosX = evt.clientX // lastPosX 是自定义的
@@ -166,6 +214,7 @@ export class Example2Component implements OnInit {
           this.canvas.lastPosX = evt.clientX
           this.canvas.lastPosY = evt.clientY
         }
+        this.changePointer(opt.pointer!, absolutePointer)
       })
 
       this.canvasInstance.on('mouse:move', opt => { // 鼠标移动时触发
@@ -177,6 +226,11 @@ export class Example2Component implements OnInit {
           this.canvasInstance?.requestRenderAll() // 重新渲染
           this.canvas.lastPosX  = evt.clientX
           this.canvas.lastPosY  = evt.clientY
+        }
+        if(this.currentPointer?.some(pointer => pointer.containsPoint(opt.pointer!))) {
+          this.canvasInstance!.defaultCursor = "pointer"
+        } else {
+          this.canvasInstance!.defaultCursor = "default"
         }
       })
 
@@ -221,15 +275,8 @@ export class Example2Component implements OnInit {
   }
 
   clearCanvas() {
+    this.destroyCanvas()
     this.repaintImage(this.currentImageUrl)
-    if (this.canvasInstance) {
-      this.offCanvasEvent()
-      this.canvasInstance.dispose()
-      this.canvasInstance = undefined
-      this.currentCanvasStateIndex = -1
-      this.canvasState = []
-      this.imageName = ''
-    }
   }
 
   restoreOriginalState() {
@@ -273,12 +320,14 @@ export class Example2Component implements OnInit {
 
   destroyCanvas() {
     if (this.canvasInstance) {
-      this.canvasInstance.off('mouse:up')
       this.canvasInstance.dispose()
       this.canvasInstance = undefined
+      this.offCanvasEvent()
     }
+    this.removePencilBrush()
     this.currentCanvasStateIndex = -1
     this.canvasState = []
+    this.currentPointer = []
     this.imageName = ''
   }
 

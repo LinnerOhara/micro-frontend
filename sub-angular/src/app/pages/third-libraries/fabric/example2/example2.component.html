@@ -28,15 +28,20 @@
     </div>
     <div class="action-bar">
       <div class="action-left">
-        <span class="action-item" (click)="closeMask()">取消</span>
+        <ng-container *ngIf="canvasType === 'ImageEditing'">
+          <span class="action-item" (click)="closeMask()">取消</span>
+        </ng-container>
+        <ng-container *ngIf="canvasType === 'ImageOverlays'">
+          <span class="action-item">请在图纸上打点标注问题位置</span>
+        </ng-container>
       </div>
       <div class="action-right">
-        <span class="action-item" (click)="clearCanvas()">清空</span>
+        <span *ngIf="canvasType === 'ImageEditing'" class="action-item" (click)="clearCanvas()">清空</span>
         <span class="action-item" (click)="export()">确定</span>
       </div>
     </div>
     <canvas #fabric></canvas>
-    <div class="tool-bar">
+    <div class="tool-bar" *ngIf="canvasType === 'ImageEditing'">
       <div class="tool-left">
         <span class="icon" [ngClass]="{ selected: isDrawing }" nz-icon nzType="edit" nzTheme="outline" (click)="changeDrawState()"></span>
         <div class="width-list">
