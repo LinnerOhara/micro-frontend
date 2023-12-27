@@ -7,6 +7,10 @@ const useDevMode = true
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    host: '0.0.0.0',
+    https: false
+  },
   plugins: [
     vue(), 
     qiankun('sub-vue', {

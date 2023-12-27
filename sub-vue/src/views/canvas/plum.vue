@@ -2,7 +2,7 @@
 import { ref, onMounted, computed } from 'vue';
 
 const el = ref<HTMLCanvasElement>();
-const ctx = computed(() => el!.value.getContext('2d')!);
+const ctx = computed(() => el!.value!.getContext('2d')!);
 
 const WIDTH = 600;
 const HEIGHT = 600;

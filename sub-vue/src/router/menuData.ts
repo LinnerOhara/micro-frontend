@@ -17,6 +17,17 @@ const menuData = [
         name: '梅花'
       }
     ]
+  },
+  {
+    path: '/webRTC',
+    name: 'webRTC',
+    icon: () => h(BorderOutlined),
+    children: [
+      {
+        path: '/webRTC/video1',
+        name: '视频1'
+      }
+    ]
   }
 ]
 
