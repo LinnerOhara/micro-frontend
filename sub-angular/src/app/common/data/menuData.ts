@@ -30,6 +30,14 @@ const menuData = [
           {
             path: '/third-libraries/fabric/example2',
             name: '示例2',
+          },
+          {
+            path: '/third-libraries/fabric/example3',
+            name: '示例3',
+          },
+          {
+            path: '/third-libraries/fabric/example4',
+            name: '示例4',
           }
         ]
       }

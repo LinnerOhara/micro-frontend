@@ -51,6 +51,8 @@ export class Example2Component implements OnInit {
       y: 160.0437435038505
     }
   ]
+  currentScaleX: number = 0
+  currentScaleY: number = 0
 
   ngOnInit(): void {
     this.imageList = [
@@ -114,6 +116,8 @@ export class Example2Component implements OnInit {
           // 设置画布的高度
           this.canvasInstance?.setHeight(canvasHeight);
           const scaleY = isOverHeight ? scaleX : this.canvasInstance.getHeight() / img.height!
+          this.currentScaleX = scaleX
+          this.currentScaleY = scaleY
           this.canvasInstance?.setBackgroundImage(img, this.canvasInstance.renderAll.bind(this.canvasInstance), {
             scaleX: scaleX,
             scaleY: scaleY
@@ -122,7 +126,10 @@ export class Example2Component implements OnInit {
           this.onCanvasEvent()
 
           if (this.canvasType === 'ImageOverlays' && this.pointers) {
-            this.pointers.forEach(item => {
+            this.pointers.map(item => {
+              item = JSON.parse(JSON.stringify(item))
+              item.x = item.x * scaleX
+              item.y = item.y * scaleY
               this.changePointer(item as any)
             })
           }
@@ -186,7 +193,7 @@ export class Example2Component implements OnInit {
     const circle = new fabric.Circle({
       left: absolutePointer?.x || point.x,
       top: absolutePointer?.y || point.y,
-      radius: 8,
+      radius: 8 * this.currentScaleX,
       fill: 'red',
       selectable: false
     });
@@ -289,6 +296,19 @@ export class Example2Component implements OnInit {
   export() {
     if (this.canvasInstance) {
       let image = this.canvasInstance.toDataURL()
+      // 移除头部的 data URL 部分
+      const base64Data = image.split(',')[1];
+      // 将 Base64 字符串转换为二进制数据
+      const binaryData = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
+      // 创建一个 Blob 对象
+      const blob = new Blob([binaryData], { type: 'image/png' });
+      let result = {
+        points: this.currentPointer?.map(item => {
+          return {x: item.left! / this.currentScaleX , y: item.top! / this.currentScaleY}
+        }),
+        file: blob,
+      }
+      console.log(result)
       this.restoreOriginalState()
       this.canvasInstance.requestRenderAll()
     }

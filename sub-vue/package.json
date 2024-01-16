@@ -13,6 +13,7 @@
     "@ant-design/icons-vue": "^6.1.0",
     "@unocss/reset": "^0.55.1",
     "ant-design-vue": "4.x",
+    "localforage": "^1.10.0",
     "vue": "^3.3.4",
     "vue-router": "^4.2.4"
   },

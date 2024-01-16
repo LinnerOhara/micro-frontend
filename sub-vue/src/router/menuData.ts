@@ -26,6 +26,14 @@ const menuData = [
       {
         path: '/webRTC/video1',
         name: '视频1'
+      },
+      {
+        path: '/webRTC/video2',
+        name: '获取视频第一帧画面'
+      },
+      {
+        path: '/webRTC/video3',
+        name: '视频切片上传'
       }
     ]
   }

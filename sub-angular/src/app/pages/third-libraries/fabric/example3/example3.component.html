@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="file-container">
+    <div class="file-item" *ngFor="let item of fileList" (click)="fileClickHandle(item.url)"></div>
+  </div>
+</div>
+
+<div class="mask" [ngClass]="{
+  show: maskVisible
+}">
+  <div class="close-icon" (click)="closeMask()">
+    <span nz-icon nzType="close-circle" nzTheme="outline"></span>
+  </div>
+  <div class="loading" [hidden]="!imageLoading">
+    <span class="spin-dot">
+      <i class="spin-dot-item"></i>
+      <i class="spin-dot-item"></i>
+      <i class="spin-dot-item"></i>
+      <i class="spin-dot-item"></i>
+    </span>
+    <div class="loading-text">加载中。。。</div>
+  </div>
+  <div class="canvas" [hidden]="imageLoading">
+    <div class="header">
+      <span>{{imageName}}</span>
+      <span class="icon" nz-icon nzType="close-circle" nzTheme="fill" (click)="closeMask()"></span>
+    </div>
+    <div class="action-bar">
+      <div class="action-right">
+        <span (click)="clearCanvas()">清空</span>
+        <span class="action-item" (click)="export()">确定</span>
+      </div>
+    </div>
+    <canvas #fabric></canvas>
+  </div>
+</div>

@@ -5,6 +5,9 @@ module.exports = {
       'Access-Control-Allow-Origin': '*',
     },
   },
+  experiments: {
+    topLevelAwait: true
+  },
   output: {
     library: `${appName}-[name]`,
     libraryTarget: 'umd',
