@@ -36,6 +36,17 @@ const menuData = [
         name: '视频切片上传'
       }
     ]
+  },
+  {
+    path: '/css',
+    name: 'css',
+    icon: () => h(BorderOutlined),
+    children: [
+      {
+        path: '/css/css1',
+        name: 'css1'
+      }
+    ]
   }
 ]
 
