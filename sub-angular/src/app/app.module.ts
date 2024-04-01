@@ -1,6 +1,7 @@
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule,  } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
 import { AppRoutingModule } from './app-routing.module';
@@ -29,6 +30,7 @@ export function initializeApp(appInitService: AppInitService) {
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    CommonModule,
     HttpClientModule,
     AppRoutingModule,
     NzButtonModule,

@@ -4,6 +4,7 @@ import { qiankunWindow } from 'vite-plugin-qiankun/dist/helper'
 import canvasRoutes from './canvas'
 import webRTCRoutes from './webRTC'
 import cssRoutes from './css'
+import abilityRoutes from "./ability";
 
 const routes: RouteRecordRaw[] = [
   {
@@ -37,6 +38,14 @@ const routes: RouteRecordRaw[] = [
       title: 'CSS'
     },
     children: cssRoutes
+  },
+  {
+    path: '/ability',
+    name: 'ability',
+    meta: {
+      title: 'ability'
+    },
+    children: abilityRoutes
   }
 ]
 
