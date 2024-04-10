@@ -8,6 +8,14 @@ const cssRoutes: RouteRecordRaw[] = [
     meta: {
       title: '延时',
     }
+  },
+  {
+    path: 'height-transition',
+    name: 'height-transition',
+    component: () => import('../views/css/height-transition.vue'),
+    meta: {
+      title: '高度过渡',
+    }
   }
 ]
 
