@@ -51,6 +51,17 @@ const menuData = [
         name: '高度过渡'
       }
     ]
+  },
+  {
+    path: '/ability',
+    name: '功能',
+    icon: () => h(BorderOutlined),
+    children: [
+      {
+        path: '/ability/watermark',
+        name: '水印'
+      }
+    ]
   }
 ]
 
