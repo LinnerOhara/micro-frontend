@@ -60,6 +60,10 @@ const menuData = [
       {
         path: '/ability/watermark',
         name: '水印'
+      },
+      {
+        path: '/ability/contextmenu',
+        name: '右键菜单'
       }
     ]
   }

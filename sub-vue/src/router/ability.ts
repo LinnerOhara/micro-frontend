@@ -8,6 +8,14 @@ const abilityRoutes: RouteRecordRaw[] = [
     meta: {
       title: '水印',
     }
+  },
+  {
+    path: 'contextmenu',
+    name: 'contextmenu',
+    component: () => import('../views/ability/contextmenu.vue'),
+    meta: {
+      title: '右键菜单',
+    }
   }
 ]
 
