@@ -12,9 +12,8 @@ export default function useContextMenu(containerRef: Ref<HTMLElement | null>) {
   const handleContextMenu = (event: MouseEvent) => {
     event.preventDefault(); // 阻止默认的右键菜单
     if (containerRef.value) {
-      const rect = containerRef.value.getBoundingClientRect();
-      x.value = event.clientX - rect.left;
-      y.value = event.clientY - rect.top;
+      x.value = event.clientX;
+      y.value = event.clientY;
       showMenu.value = true;
     }
   }
@@ -28,7 +27,7 @@ export default function useContextMenu(containerRef: Ref<HTMLElement | null>) {
   onMounted(() => {
     document.addEventListener('mousedown', clickOutside);
     if (containerRef.value) {
-      containerRef.value.addEventListener('mousedown', handleContextMenu);
+      containerRef.value.addEventListener('contextmenu', handleContextMenu);
     }
   });
 

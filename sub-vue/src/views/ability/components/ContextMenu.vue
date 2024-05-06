@@ -2,13 +2,16 @@
 import {computed, ref} from "vue";
 import useContextMenu from './useContextMenu.ts'
 import useViewport from "./useViewport.ts";
+import { default as vSizeOb, type HandlerParams } from '../directives/sizeDirect.ts';
 
-const props = defineProps({
-  menu: {
-    type: Array,
-    default: () => []
-  }
-})
+type MenuItem = {
+  item: string
+  label: string
+}
+
+const props = defineProps<{
+  menu: MenuItem[]
+}>()
 
 const emit = defineEmits(['select'])
 const containerRef = ref<HTMLElement | null>(null)
@@ -17,7 +20,7 @@ const { vw, vh } = useViewport()
 const w = ref(0)
 const h = ref(0)
 
-function handleSizeChange(e) {
+function handleSizeChange(e: HandlerParams) {
   w.value = e.width
   h.value = e.height
 }
@@ -36,20 +39,25 @@ const pos = computed(() => {
   }
 })
 
-function handleClick(item) {
+function handleClick(item: MenuItem) {
   showMenu.value = false;
   emit('select', item)
 }
 </script>
 
 <template>
-  <div>
-    <Teleport>
-      <div>
-
+  <div ref="containerRef">
+    <Teleport to="body">
+      <div
+        v-if="showMenu"
+        class="context-menu"
+        :style="{
+          left: pos.posX + 'px',
+          top: pos.posY + 'px'
+        }">
         <div v-size-ob="handleSizeChange" class="menu-list">
           <div class="menu-item"
-            v-for="item in menu"
+            v-for="item in props.menu"
             :key="item.label"
             @click="handleClick(item)">
             {{item.label}}
@@ -57,6 +65,7 @@ function handleClick(item) {
         </div>
       </div>
     </Teleport>
+    <slot></slot>
   </div>
 </template>
 
@@ -64,6 +73,11 @@ function handleClick(item) {
 .context-menu {
   position: fixed;
   background: #eee;
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.2);
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1),  1px 1px 2px rgba(0, 0, 0, 0.2);
+  min-width: 100px;
+  border-radius: 5px;
+  font-size: 12px;
+  color: #1d1d1f;
+  line-height: 1.8;
 }
 </style>
