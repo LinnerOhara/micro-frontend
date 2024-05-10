@@ -16,6 +16,14 @@ const cssRoutes: RouteRecordRaw[] = [
     meta: {
       title: '高度过渡',
     }
+  },
+  {
+    path: 'underline',
+    name: 'underline-transition',
+    component: () => import('../views/css/underline.vue'),
+    meta: {
+      title: '下划线',
+    }
   }
 ]
 
