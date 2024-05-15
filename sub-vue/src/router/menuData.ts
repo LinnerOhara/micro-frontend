@@ -68,6 +68,10 @@ const menuData = [
       {
         path: '/ability/contextmenu',
         name: '右键菜单'
+      },
+      {
+        path: '/ability/x-scroll',
+        name: '横向滚动'
       }
     ]
   }

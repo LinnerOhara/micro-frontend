@@ -16,6 +16,14 @@ const abilityRoutes: RouteRecordRaw[] = [
     meta: {
       title: '右键菜单',
     }
+  },
+  {
+    path: 'x-scroll',
+    name: 'x-scroll',
+    component: () => import('../views/ability/xScroll.vue'),
+    meta: {
+      title: '横向滚动',
+    }
   }
 ]
 
