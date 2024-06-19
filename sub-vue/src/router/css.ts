@@ -24,6 +24,22 @@ const cssRoutes: RouteRecordRaw[] = [
     meta: {
       title: '下划线',
     }
+  },
+  {
+    path: 'tick',
+    name: 'tick',
+    component: () => import('../views/css/tick.vue'),
+    meta: {
+      title: '打勾动画',
+    }
+  },
+  {
+    path: 'kaleidoscopic',
+    name: 'kaleidoscopic',
+    component: () => import('../views/css/kaleidoscopic.vue'),
+    meta: {
+      title: '走马灯',
+    }
   }
 ]
 

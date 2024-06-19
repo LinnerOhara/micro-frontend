@@ -28,8 +28,7 @@ const startRecording = async () => {
       // 处理录制完成后的数据，可以上传到服务器或进行其他操作 video/webm
       const recordedBlob = new Blob(recordedChunks.value, { type: 'video/mp4' });
       videoElement.value.srcObject = null; // 停止显示摄像头画面
-      console.log(recordedBlob)
-      
+
       // 将 Blob 转换为 Data URL
       const videoDataURL = URL.createObjectURL(recordedBlob);
 

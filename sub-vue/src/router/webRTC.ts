@@ -24,6 +24,14 @@ const webRTCRoutes: RouteRecordRaw[] = [
     meta: {
       title: '视频切片上传',
     }
+  },
+  {
+    path: 'video4',
+    name: 'video4',
+    component: () => import('../views/webRTC/video4.vue'),
+    meta: {
+      title: '提取画面帧',
+    }
   }
 ]
 

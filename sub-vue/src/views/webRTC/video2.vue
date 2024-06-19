@@ -5,18 +5,21 @@ const loadVideo = (url: string): Promise<string> => {
   return new Promise((resolve) => {
     const videoElement = document.createElement('video')
     videoElement.src = url
-    videoElement.addEventListener('loadedmetadata', () => {
+    videoElement.autoplay = true;
+    videoElement.muted = true;
+    videoElement.addEventListener('canplay', () => {
       const canvas = document.createElement('canvas')
       canvas.width = videoElement.videoWidth
       canvas.height = videoElement.videoHeight
       const context = canvas.getContext('2d')
       context?.drawImage(videoElement, 0, 0, canvas.width, canvas.height)
 
-      // const imageUrl = canvas.toDataURL('image/jpeg', { alpha: true })
-      canvas.toBlob((blob: any) => {
-        resolve(blob)
-      },
-      "image/jpeg")
+      const imageUrl = canvas.toDataURL('image/jpeg', { alpha: true })
+      resolve(imageUrl)
+      // canvas.toBlob((blob: any) => {
+      //   resolve(blob)
+      // },
+      // "image/jpeg")
     })
   })
 }
@@ -54,7 +57,7 @@ const previewUrl = ref<string>('')
   padding: 40px 20px;
 
   img {
-    max-width: 80%;
+    max-width: 40%;
   }
 }
 </style>

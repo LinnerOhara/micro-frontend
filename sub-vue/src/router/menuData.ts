@@ -34,6 +34,10 @@ const menuData = [
       {
         path: '/webRTC/video3',
         name: '视频切片上传'
+      },
+      {
+        path: '/webRTC/video4',
+        name: '提取画面帧'
       }
     ]
   },
@@ -53,6 +57,14 @@ const menuData = [
       {
         path: '/css/underline',
         name: '下划线'
+      },
+      {
+        path: '/css/tick',
+        name: '打勾动画'
+      },
+      {
+        path: '/css/kaleidoscopic',
+        name: '走马灯'
       }
     ]
   },
