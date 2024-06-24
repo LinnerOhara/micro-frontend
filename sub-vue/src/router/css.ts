@@ -40,6 +40,14 @@ const cssRoutes: RouteRecordRaw[] = [
     meta: {
       title: '走马灯',
     }
+  },
+  {
+    path: 'starry-sky',
+    name: 'starry-sky',
+    component: () => import('../views/css/starry-sky.vue'),
+    meta: {
+      title: '星空',
+    }
   }
 ]
 

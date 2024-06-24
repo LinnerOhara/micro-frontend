@@ -65,6 +65,10 @@ const menuData = [
       {
         path: '/css/kaleidoscopic',
         name: '走马灯'
+      },
+      {
+        path: '/css/starry-sky',
+        name: '星空'
       }
     ]
   },
