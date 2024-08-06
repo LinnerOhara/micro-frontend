@@ -47,6 +47,14 @@ const cssRoutes: RouteRecordRaw[] = [
     component: () => import('../views/css/starry-sky.vue'),
     meta: {
       title: '星空',
+    },
+  },
+  {
+    path: 'follow-move',
+    name: 'follow-move',
+    component: () => import('../views/css/follow-move.vue'),
+    meta: {
+      title: '移动跟随',
     }
   }
 ]
