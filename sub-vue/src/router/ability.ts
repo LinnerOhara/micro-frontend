@@ -24,6 +24,14 @@ const abilityRoutes: RouteRecordRaw[] = [
     meta: {
       title: '横向滚动',
     }
+  },
+  {
+    path: 'compress',
+    name: 'compress',
+    component: () => import('../views/ability/compress.vue'),
+    meta: {
+      title: '压缩',
+    }
   }
 ]
 

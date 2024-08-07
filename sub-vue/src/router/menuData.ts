@@ -88,6 +88,10 @@ const menuData = [
       {
         path: '/ability/x-scroll',
         name: '横向滚动'
+      },
+      {
+        path: '/ability/compress',
+        name: '压缩'
       }
     ]
   }
