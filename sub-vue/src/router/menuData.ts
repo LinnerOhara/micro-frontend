@@ -69,6 +69,10 @@ const menuData = [
       {
         path: '/css/starry-sky',
         name: '星空'
+      },
+      {
+        path: '/css/follow-move',
+        name: '移动跟随'
       }
     ]
   },
