@@ -56,6 +56,14 @@ const cssRoutes: RouteRecordRaw[] = [
     meta: {
       title: '移动跟随',
     }
+  },
+  {
+    path: 'backage-image',
+    name: 'backage-image',
+    component: () => import('../views/css/backage-image.vue'),
+    meta: {
+      title: '背景图片',
+    }
   }
 ]
 
