@@ -77,6 +77,10 @@ const menuData = [
       {
         path: '/css/follow-move',
         name: '移动跟随'
+      },
+      {
+        path: '/css/backage-image',
+        name: 'CSS背景图片'
       }
     ]
   },
