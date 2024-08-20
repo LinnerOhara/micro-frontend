@@ -15,6 +15,10 @@ const menuData = [
       {
         path: '/canvas/plum',
         name: '梅花'
+      },
+      {
+        path: '/canvas/clock',
+        name: '粒子时钟'
       }
     ]
   },

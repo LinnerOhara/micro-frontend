@@ -8,6 +8,14 @@ const canvasRoutes: RouteRecordRaw[] = [
     meta: {
       title: '梅花',
     }
+  },
+  {
+    path: 'clock',
+    name: 'clock',
+    component: () => import('../views/canvas/clock.vue'),
+    meta: {
+      title: '粒子时钟',
+    }
   }
 ]
 
