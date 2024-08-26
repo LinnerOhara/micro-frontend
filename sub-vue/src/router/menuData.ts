@@ -81,6 +81,10 @@ const menuData = [
       {
         path: '/css/backage-image',
         name: 'CSS背景图片'
+      },
+      {
+        path: '/css/carousel',
+        name: '轮播图'
       }
     ]
   },

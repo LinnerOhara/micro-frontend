@@ -64,6 +64,14 @@ const cssRoutes: RouteRecordRaw[] = [
     meta: {
       title: '背景图片',
     }
+  },
+  {
+    path: 'carousel',
+    name: 'carousel',
+    component: () => import('../views/css/carousel.vue'),
+    meta: {
+      title: '轮播图',
+    }
   }
 ]
 
