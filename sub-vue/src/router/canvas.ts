@@ -16,6 +16,14 @@ const canvasRoutes: RouteRecordRaw[] = [
     meta: {
       title: '粒子时钟',
     }
+  },
+  {
+    path: 'audio',
+    name: 'audio',
+    component: () => import('../views/canvas/audio.vue'),
+    meta: {
+      title: '音频可视化',
+    }
   }
 ]
 

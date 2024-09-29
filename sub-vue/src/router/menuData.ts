@@ -19,6 +19,10 @@ const menuData = [
       {
         path: '/canvas/clock',
         name: '粒子时钟'
+      },
+      {
+        path: '/canvas/audio',
+        name: '音频可视化'
       }
     ]
   },
